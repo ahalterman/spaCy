@@ -16,7 +16,7 @@ from spacy.language import Language
     vectors_loc=("Path to .vec file", "positional", None, str),
     lang=("Optional language ID. If not set, blank Language() will be used.",
           "positional", None, str))
-def main(vectors_loc, lang=None):
+def main(vectors_loc, upper=False, lang=None):
     if lang is None:
         nlp = Language()
     else:
@@ -33,7 +33,14 @@ def main(vectors_loc, lang=None):
             pieces = line.rsplit(' ', int(nr_dim))
             word = pieces[0]
             vector = numpy.asarray([float(v) for v in pieces[1:]], dtype='f')
-            nlp.vocab.set_vector(word, vector)  # add the vectors to the vocab
+            # add the vectors to the vocab
+            nlp.vocab.set_vector(word, vector)
+            if upper:
+                title_case = word.title()
+                upper_case = word.title()
+                # point the upper case words to the newly added vector
+                nlp.vocab.vectors.add(title_case, row = nlp.vocab[word].rank)
+                nlp.vocab.vectors.add(upper_case, row = nlp.vocab[word].rank)
     # test the vectors and similarity
     text = 'class colspan'
     doc = nlp(text)
