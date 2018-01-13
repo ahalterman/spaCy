@@ -165,7 +165,7 @@ p
     vector = numpy.random.uniform(-1, 1, (300,))
     cat_id = nlp.vocab.strings[u'cat']
     nlp.vocab.vectors.add(cat_id, vector=vector)
-    nlp.vocab.vectors.add(u'dog', row=0)
+    nlp.vocab.vectors.add(u'dog', row=nlp.vocab[u'cat'].rank)
 
 +table(["Name", "Type", "Description"])
     +row
